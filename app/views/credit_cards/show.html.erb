@@ -15,13 +15,20 @@
 </div>
 <hr>
 <div class="container py-4">
-  <h3>Already booked dates for this card: </h3>
+  <% if @credit_card.user_id == current_user.id %>
+    <h3>Your bookings:</h3>
+  <% else %>
+    <h3>Booked for the following dates: </h3>
+  <% end %>
   <% @reservations.each do |reservation| %>
     <br>
     <div class="list-group">
       <span class="list-group-item"> <strong>From: </strong> <%= reservation.start_date %></span>
       <span class="list-group-item"><strong>Until: </strong><%= reservation.end_date %></span>
     </div>
+      <% if reservation.user_id == current_user.id %>
+        <%= link_to "Cancel your reservation", reservation_path(reservation), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "btn btn-primary" %>
+      <% end %>
     <br>
     <% end %>
 </div>
